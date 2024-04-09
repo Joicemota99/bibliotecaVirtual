@@ -1,6 +1,6 @@
 # Biblioteca Virtual
 
-💎 O objetivo do projeto é criar uma API, identidade visual e o frontend de uma biblioteca virtual. 
+💎 O objetivo do projeto é criar uma API, identidade visual e o frontend de uma biblioteca virtual. [PROJETO EM DESENVOLVIMENTO]
 
 ## **🛠️ Ferramentas e Linguagens**
 
