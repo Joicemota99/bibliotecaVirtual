@@ -21,3 +21,8 @@ create table livro_autor(
   CONSTRAINT fk_autor FOREIGN KEY (autor_id) REFERENCES autor(id),
   CONSTRAINT unique_livro_autor UNIQUE (livro_id, autor_id)
 )
+
+CREATE TABLE categorias(
+	id SERIAL PRIMARY KEY,
+  descricao TEXT NOT NULL
+)

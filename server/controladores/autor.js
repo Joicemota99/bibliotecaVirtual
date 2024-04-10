@@ -27,4 +27,21 @@ const cadastrarAutor = async(req,res) =>{
     }
 }
 
-module.exports = cadastrarAutor
+const buscarAutor = async(req,res) =>{
+    const {nome} = req.query
+
+    try{
+    const buscandoAutor = await knex('autor').where({nome}) 
+    if(buscandoAutor.length === 0){
+        return res.status(404).json({mensagem:'Autor não encontrado'})
+    }
+    return res.status(200).json({autor : buscandoAutor })
+    }catch(error){
+        console.log(error)
+    return res.status(500).json({mensagem: 'Erro no servidor ao buscar autor'})
+    }
+}
+module.exports = {
+    cadastrarAutor,
+    buscarAutor
+}

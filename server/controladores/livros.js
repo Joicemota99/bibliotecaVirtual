@@ -27,4 +27,21 @@ const cadastrarLivro = async (req,res) => {
     }
 }
 
-module.exports = cadastrarLivro
+const buscarLivro = async(req,res) =>{
+    const {titulo} = req.query
+
+    try{
+    const buscandoLivro = await knex('livros').where({titulo}) 
+    if(buscandoLivro.length === 0){
+        return res.status(404).json({mensagem:'Livro não encontrado'})
+    }
+    return res.status(200).json({livros : buscandoLivro })
+    }catch(error){
+        console.log(error)
+    return res.status(500).json({mensagem: 'Erro no servidor ao buscar Livro'})
+    }
+}
+module.exports = {
+    cadastrarLivro,
+    buscarLivro
+}
