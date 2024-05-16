@@ -22,4 +22,24 @@ const cadastrarCategoria = async (req,res) =>{
     }
 }
 
-module.exports = cadastrarCategoria
+const deletarCategoria = async(req,res) =>{
+    const {id} = req.params
+
+    try{
+        const buscarCategoria = await knex('categorias').where({id:id}).first()
+        if(!buscarCategoria){
+            return res.status(404).json({mensagem: 'Não existe uma categoria com essas informações'})
+        }
+
+        const deletar =  await knex('categorias').where({id:id}).del()
+        return res.status(200).json({ mensagem: 'Categoria deletada com sucesso' })
+
+    }catch(error){
+        res.status(500).json({mensagem: 'Erro no servidor ao cadastrar categoria'})
+    }
+}
+
+module.exports = {
+    cadastrarCategoria,
+    deletarCategoria
+}

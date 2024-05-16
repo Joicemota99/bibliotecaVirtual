@@ -41,7 +41,55 @@ const buscarLivro = async(req,res) =>{
     return res.status(500).json({mensagem: 'Erro no servidor ao buscar Livro'})
     }
 }
+
+const atualizarLivro = async(req,res) =>{
+    const {titulo, data_publicacao, subtitulo} = req.body
+    const {id} = req.params 
+
+    if(!titulo || !data_publicacao || !subtitulo){
+        return res.status(400).json({mensagem: 'Todos os campos devem estar preenchidos'})
+    }
+    try{
+        const buscandoLivro = await knex('livros').where({id:id}).first()
+
+        if(!buscandoLivro){
+            return res.status(404).json({mensagem:'Não existe esse livro'})
+        }
+        const dataFormatada = new Date(data_publicacao).toLocaleDateString('en-CA')
+        const atualizandoLivro = await knex('livros').where({id: id}).update({
+            titulo: titulo,
+            data_publicacao: dataFormatada,
+            subtitulo: subtitulo,   
+        })
+
+        return res.status(200).json(atualizandoLivro)
+        
+    }catch(error){
+        console.log(error)
+        return res.status(500).json({mensagem: 'Erro no servidor ao buscar Livro'})  
+    }
+}
+
+const deletarLivro = async(req,res) =>{
+    const {id} = req.params
+
+    try{
+        const buscandoLivro = await knex('livros').where({id:id}).first()
+        if(!buscandoLivro){
+            return res.status(404).json({mensagem:'Não existe esse Livro'})
+        }
+
+        const deletar = await knex('livros').where({id:id}).del()
+        return res.status(200).json({ mensagem: 'Livro deletado com sucesso' })
+
+    }catch(error){
+        return res.status(500).json({mensagem: 'Erro no servidor ao deletar Livro'})  
+    }
+}
 module.exports = {
     cadastrarLivro,
-    buscarLivro
+    buscarLivro,
+    atualizarLivro,
+    deletarLivro
+    
 }

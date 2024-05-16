@@ -41,7 +41,54 @@ const buscarAutor = async(req,res) =>{
     return res.status(500).json({mensagem: 'Erro no servidor ao buscar autor'})
     }
 }
+
+const atualizarAutor = async(req,res) =>{
+    const {nome, data_de_nascimento, sexo} = req.body
+    const {id} = req.params 
+
+    if(!nome || !data_de_nascimento || !sexo){
+        return res.status(400).json({mensagem: 'Todos os campos devem estar preenchidos'})
+    }
+    try{
+        const buscandoAutor = await knex('autor').where({id:id}).first()
+
+        if(!buscandoAutor){
+            return res.status(404).json({mensagem:'Não existe esse Autor'})
+        }
+        const dataFormatada = new Date(data_de_nascimento).toLocaleDateString('en-CA')
+        const atualizandoAutor = await knex('autor').where({id: id}).update({
+            nome: nome,
+            data_de_nascimento: dataFormatada,
+            sexo: sexo,   
+        })
+
+        return res.status(200).json(atualizandoAutor)
+        
+    }catch(error){
+        console.log(error)
+        return res.status(500).json({mensagem: 'Erro no servidor ao buscar Autor'})  
+    }
+}
+
+const deletarAutor = async(req,res) =>{
+    const {id} = req.params
+
+    try{
+        const buscandoAutor = await knex('autor').where({id:id}).first()
+        if(!buscandoAutor){
+            return res.status(404).json({mensagem:'Não existe esse Autor'})
+        }
+
+        const deletar = await knex('autor').where({id:id}).del()
+        return res.status(200).json({ mensagem: 'Autor deletado com sucesso' })
+
+    }catch(error){
+        return res.status(500).json({mensagem: 'Erro no servidor ao deletar Autor'})  
+    }
+}
 module.exports = {
     cadastrarAutor,
-    buscarAutor
+    buscarAutor,
+    atualizarAutor,
+    deletarAutor
 }
